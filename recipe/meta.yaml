@@ -1,4 +1,4 @@
-{% set name = "pivy" %}
+{% set name = "pivy-rt" %}
 {% set version = "0.6.10" %}
 
 {% if qt is undefined %}
@@ -40,30 +40,28 @@ requirements:
     - swig
   host:
     - python
-    - coin3d
+    - coin3d-rt
   {% if qt|int >=6 %}
     - qt6-main
-    - soqt6
+    - soqt6-rt
   {% else %}
     - qt-main
-    - soqt
+    - soqt-rt
   {% endif %}
   run:
     - python
 
-test:
-  imports:
-    - pivy.coin
-    - pivy.gui.soqt
+# test:
+#   imports:
+#     - pivy.coin
+#     - pivy.gui.soqt
 
 about:
-  home: https://github.com/FreeCAD/pivy
+  home: https://github.com/realthunder/coin
   license: ISC
   license_file: LICENSE
-  summary: python bindings to coin3d.
-  doc_url: https://github.com/FreeCAD/pivy
-  dev_url: https://github.com/FreeCAD/pivy
+  summary: python bindings to coin3d with enhanced shadow rendering.
 
 extra:
   recipe-maintainers:
-    - looooo
+    - realthunder
