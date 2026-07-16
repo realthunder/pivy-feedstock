@@ -1,0 +1,32 @@
+From e584c8eb703d35f28cff80a42745cc68509edb9e Mon Sep 17 00:00:00 2001
+From: "Zheng, Lei" <realthunder.dev@gmail.com>
+Date: Wed, 15 Jul 2026 16:12:06 +0800
+Subject: [PATCH] Extend module INSTALL_RPATH with CMAKE_INSTALL_RPATH
+
+The _coin module hardcoded INSTALL_RPATH to $ORIGIN, which breaks
+loading when Coin is installed in a non-system prefix; append the
+user-provided CMAKE_INSTALL_RPATH so a custom Coin location can be
+baked in.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013biZFQUxUJP1jUMY7jWQFk
+---
+ interfaces/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/interfaces/CMakeLists.txt b/interfaces/CMakeLists.txt
+index 35485d1..da82a73 100644
+--- a/interfaces/CMakeLists.txt
++++ b/interfaces/CMakeLists.txt
+@@ -44,7 +44,7 @@ target_link_libraries(coin PUBLIC Coin::Coin)
+ install(TARGETS coin DESTINATION ${PIVY_Python_SITEARCH}/pivy)
+ 
+ cmake_policy(SET CMP0068 NEW)  # Use RUNPATH instead of RPATH, default from CMake 3.9
+-set_target_properties(coin PROPERTIES BUILD_RPATH "$ORIGIN" INSTALL_RPATH "$ORIGIN")
++set_target_properties(coin PROPERTIES BUILD_RPATH "$ORIGIN" INSTALL_RPATH "$ORIGIN;${CMAKE_INSTALL_RPATH}")
+ 
+ if (SoQt_FOUND)
+ 
+-- 
+2.43.0
+
