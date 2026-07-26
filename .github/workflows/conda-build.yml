@@ -44,19 +44,19 @@ jobs:
           # - CONFIG: osx_64_python3.10.____cpython
           #   UPLOAD_PACKAGES: True
           #   os: macos
-          #   runs_on: ['macos-13']
+          #   runs_on: ['macos-15-intel']
           - CONFIG: osx_64_python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-            runs_on: ['macos-13']
+            runs_on: ['macos-15-intel']
           # - CONFIG: osx_arm64_python3.10.____cpython
           #   UPLOAD_PACKAGES: True
           #   os: macos
-          #   runs_on: ['macos-13']
+          #   runs_on: ['macos-15-intel']
           - CONFIG: osx_arm64_python3.11.____cpython
             UPLOAD_PACKAGES: True
             os: macos
-            runs_on: ['macos-13']
+            runs_on: ['macos-15-intel']
           # - CONFIG: win_64_python3.10.____cpython
           #   UPLOAD_PACKAGES: True
           #   os: windows
