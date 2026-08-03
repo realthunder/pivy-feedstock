@@ -3,7 +3,7 @@ MACOSX_SDK_VERSION:
 c_stdlib:
 - vs
 channel_sources:
-- realthunder,conda-forge,defaults
+- realthunder,conda-forge
 channel_targets:
 - realthunder main
 cxx_compiler:
