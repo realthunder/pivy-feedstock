@@ -7,7 +7,7 @@ c_stdlib_version:
 cdt_name:
 - conda
 channel_sources:
-- realthunder,conda-forge,defaults
+- realthunder,conda-forge
 channel_targets:
 - realthunder main
 cxx_compiler:
