@@ -58,7 +58,7 @@ requirements:
 #     - pivy.gui.soqt
 
 about:
-  home: https://github.com/realthunder/coin
+  home: https://github.com/realthunder/pivy
   license: ISC
   license_file: LICENSE
   summary: python bindings to coin3d with enhanced shadow rendering.
