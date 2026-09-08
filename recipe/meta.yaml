@@ -1,32 +1,25 @@
 {% set name = "pivy-rt" %}
 {% set version = "0.6.10" %}
 
-{% if qt is undefined %}
-{% set qt = "6" %}
-{% endif %}
-
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  fn: pivy.tar.gz
-  url: https://github.com/coin3d/pivy/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 7b409816c9fad84cf94f93659281f9dd2501d285eb2fc609e9401a3d004ce723
-  patches:
-    - patches/windows_cmake_install_path_fix.patch
-    - patches/extend_install_rpath.patch
+  # The fork, not coin3d/pivy. Upstream 0.6.10's SWIG interfaces are written
+  # against the Python 2 C API (PyInt_FromLong, PyString_Check) and compiled
+  # only because SWIG shipped compatibility macros for those names. SWIG 4.3
+  # deleted that block with Python 2 support, so upstream cannot be built by
+  # any swig this stack has. The fork's "Drop Python 2" commit fixes it, and
+  # also carries what used to be the two patches here -- the Windows
+  # site-packages path normalisation and the INSTALL_RPATH extension.
+  git_url: https://github.com/realthunder/pivy.git
+  git_rev: rt-0.6.10
+  git_depth: 1
 
 build:
-  number: 4
-  string: py{{ CONDA_PY }}qt{{ qt }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-  script_env:
-  {% if qt|int >=6 %}
-    - USE_QT6=1
-  {% else %}
-    - USE_QT6=0
-  skip: true  # [py>311]
-  {% endif %}
+  number: 0
+  string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
 requirements:
   build:
@@ -38,17 +31,25 @@ requirements:
     - msinttypes                             # [win]
     - cmake
     - ninja
-    - swig
+    # Must be the same SWIG GENERATION freecad-rt is built with: SWIG shares
+    # its type registry through a module named swig_runtime_data<N>, pivy
+    # registers Coin's types into the module ITS swig named and FreeCAD looks
+    # them up in the module OURS named. A mismatch fails only when a pointer
+    # crosses the boundary, as "RuntimeError: No SWIG wrapped library loaded",
+    # taking out all Coin scripting in a package that installs and imports
+    # cleanly. 4.2.x emits generation 4, 4.5.x emits 5. Keep in step with the
+    # pin in freecad-rt-feedstock; do not widen it as housekeeping.
+    - swig >=4.5,<4.6
   host:
     - python
+    # No Qt and no SoQt. pivy's CMakeLists does find_package(SoQt CONFIG)
+    # without REQUIRED and only looks for Qt inside if(SoQt_FOUND), so
+    # leaving them out builds the _coin module alone -- which is exactly
+    # what the dev stack builds from source and what FreeCAD uses: 105 of
+    # its 107 pivy imports are pivy.coin, and pivy.quarter is pure Python
+    # that keeps working. Dropping them is what lets this build for every
+    # python, instead of being tied to one Qt's variant matrix.
     - coin3d-rt
-  {% if qt|int >=6 %}
-    - qt6-main
-    - soqt6-rt
-  {% else %}
-    - qt-main
-    - soqt-rt
-  {% endif %}
   run:
     - python
 
