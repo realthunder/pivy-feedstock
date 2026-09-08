@@ -20,6 +20,14 @@ source:
 build:
   number: 0
   string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+  # Only 3.13 for now. This is what controls the rendered matrix --
+  # conda-smithy drops a variant whose recipe skips it, which is how the
+  # old "skip: true # [py>311]" in the Qt5 branch produced a 3.10/3.11-only
+  # feedstock. A python pin in conda_build_config.yaml does NOT work: smithy
+  # takes the python list from the global pinning and ignores the recipe's.
+  # Keep this in step with freecad-rt-feedstock, or one of the two builds a
+  # python the other cannot resolve.
+  skip: true  # [py != 313]
 
 requirements:
   build:
