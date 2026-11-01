@@ -13,9 +13,13 @@ source:
   # any swig this stack has. The fork's "Drop Python 2" commit fixes it, and
   # also carries what used to be the two patches here -- the Windows
   # site-packages path normalisation and the INSTALL_RPATH extension.
-  git_url: https://github.com/realthunder/pivy.git
-  git_rev: rt-0.6.10
-  git_depth: 1
+  #
+  # As an archive of a commit, the way occt-feedstock takes its fork. It was
+  # git_rev: rt-0.6.10 with git_depth: 1, and a shallow clone holds the
+  # default branch alone: the checkout of the branch failed before anything
+  # compiled, on every platform.
+  url: https://github.com/realthunder/pivy/archive/ebaa394088e5ab29b5f5ce2efc406fc95466279e.tar.gz
+  sha256: 390663b50cbfd08b48761aaea1440cfea8f505af29fd1f8a4954c4d662487b1e
 
 build:
   number: 0
